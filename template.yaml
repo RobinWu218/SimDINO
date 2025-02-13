@@ -1,0 +1,426 @@
+theme: default
+organization: UCB
+title: |
+  SimDINO: Simplifying DINO by Coding Rate Regularization
+# journal: "ICML'25"
+resources:
+  # paper: https://openreview.net/
+  arxiv: https://arxiv.org
+  code: https://github.com
+  video: # To be updated when available
+description: A simplified and more robust version of DINO that achieves better performance through explicit coding rate regularization.
+
+image: public/simdino_pipeline.jpg
+url: # To be updated
+authors:
+  - name: Ziyang Wu
+    affiliation: [1]
+    url: # To be updated
+  - name: Jingyuan Zhang
+    affiliation: [2]
+    url: # To be updated
+  - name: Druv Pai
+    affiliation: [1]
+    url: # To be updated
+  - name: Xudong Wang
+    affiliation: [1]
+    url: # To be updated
+  - name: Chandan Singh
+    affiliation: [3]
+    url: # To be updated
+  - name: Jianwei Yang
+    affiliation: [3]
+    url: # To be updated
+  - name: Jianfeng Gao
+    affiliation: [3]
+    url: # To be updated
+  - name: Yi Ma
+    affiliation: [1,2,4]
+
+affiliations:
+  - UC Berkeley
+  - TranscEngram
+  - Microsoft Research
+  - HKU
+
+
+bibtex: >
+  @article{wu2025simdino,
+    title={Simplifying DINO by Coding Rate Regularization},
+    author={Ziyang Wu, Jingyuan Zhang, Druv Pai, Xudong Wang, Chandan Singh, Jianwei Yang, Jianfeng Gao, Yi Ma},
+    booktitle={arXiv preprint arXiv:},
+    year={2025}
+  }
+  
+
+teaser: pipelines.png
+abstract: |
+  DINO and DINOv2 are two model families being widely used to learn representations from unlabeled imagery data at large scales. Their learned representations often enable state-of-the-art performance for downstream tasks, such as image classification and segmentation. However, they employ many empirically motivated design choices and their training pipelines are highly complex and unstable &mdash; many hyperparameters need to be carefully tuned to ensure that the representations do not collapse &mdash; which poses considerable difficulty to improving them or adapting them to new domains. In this work, we posit that we can remove most such-motivated idiosyncrasies in the pre-training pipelines, and only need to add an explicit coding rate term in the loss function to avoid collapse of the representations. As a result, we obtain highly simplified variants of the DINO and DINOv2 which we call SimDINO and SimDINOv2, respectively. Remarkably, these simplified models are more robust to different design choices, such as network architecture and hyperparameters, and they learn even higher-quality representations, measured by performance on downstream tasks, offering a Pareto improvement over the corresponding DINO and DINOv2 models. This work highlights the potential of using simplifying design principles to improve the empirical practice of deep learning.
+
+body:
+  - title: Overview
+    text: |
+      We introduce SimDINO and SimDINOv2 by simplifying widely-used SSL algorithms (i.e. DINO and DINOv2) via coding rate regularization.
+      These simplified algorithms lead to several key benefits:
+      - **Simplicity:** Removing many empirically-selected components from the original DINO pipeline.
+      - **Robustness:** More robust to variations in architecture, datasets and other configuations.
+      - **Performance:** Leading to better learned represetntation and performance on downstream tasks.
+      - **Interpretability:** Providing a theoretically motivated way to prevent representation collapse.
+
+      Overall, making design choices explicit and principled lead to simplicity and improved performance in vision SSL.
+
+
+  - title: Main Results
+
+    text: |
+      Our experiments demonstrate that SimDINO and SimDINOv2 achieve superior performance compared to their original counterparts:
+
+      ### Quantitative Results
+      <div class="uk-position-relative" uk-slideshow="animation: fade; autoplay: true; autoplay-interval: 5000; ratio: 26:12">
+        <div class="uk-slideshow-items">
+          <div class="uk-card uk-card-default uk-card-body uk-margin-remove uk-cover">
+            <h3 class="uk-card-title">ImageNet Classification (ImageNet-1K)</h3>
+              <table class="uk-table uk-table-small uk-text-small uk-table-divider">
+                <thead>
+                  <tr>
+                    <th>Method</th>
+                    <th>Model</th>
+                    <th>Epochs</th>
+                    <th>k-NN</th>
+                    <th>Linear</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>DINO</td>
+                    <td>ViT-B</td>
+                    <td>100</td>
+                    <td>72.9</td>
+                    <td>76.3</td>
+                  </tr>
+                  <tr class="uk-active">
+                    <td>SimDINO</td>
+                    <td>ViT-B</td>
+                    <td>100</td>
+                    <td><b>74.9</td>
+                    <td><b>77.3</td>
+                  </tr>
+                  <tr>
+                    <td>DINOv2</td>
+                    <td>ViT-B</td>
+                    <td>100</td>
+                    <td>76.0</td>
+                    <td>77.2</td>
+                  </tr>
+                  <tr class="uk-active">
+                    <td>SimDINOv2</td>
+                    <td>ViT-B</td>
+                    <td>100</td>
+                    <td><b>78.1</td>
+                    <td><b>79.7</td>
+                  </tr>
+                  <tr>
+                    <td>DINOv2</td>
+                    <td>ViT-L</td>
+                    <td>100</td>
+                    <td>80.8</td>
+                    <td>82.0</td>
+                  </tr>
+                  <tr class="uk-active">
+                    <td>SimDINOv2</td>
+                    <td>ViT-L</td>
+                    <td>100</td>
+                    <td><b>81.1</td>
+                    <td><b>82.4</td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+          <div class="uk-card uk-card-default uk-card-body uk-margin-remove uk-cover">
+            <h3 class="uk-card-title">Unsupervised Object Detection (COCO val2017)</h3>
+            <table class="uk-table uk-table-small uk-text-small uk-table-divider">
+              <thead>
+                <tr>
+                  <th>Method</th>
+                  <th>Model</th>
+                  <th>AP50(&uarr;)</th>
+                  <th>AP75(&uarr;)</th>
+                  <th>AP(&uarr;)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>SimDINO</td>
+                  <td>ViT-L/16</td>
+                  <td><b>5.4</td>
+                  <td>1.9</td>
+                  <td>2.4</td>
+                </tr>
+                <tr class="uk-active">
+                  <td>SimDINO</td>
+                  <td>ViT-B/16</td>
+                  <td>5.2</td>
+                  <td><b>2.0</td>
+                  <td><b>2.5</td>
+                </tr>
+                <tr>
+                  <td>DINO</td>
+                  <td>ViT-B/16</td>
+                  <td>3.9</td>
+                  <td>1.5</td>
+                  <td>1.8</td>
+                </tr>
+                <tr class="uk-text-muted">
+                  <td>DINO</td>
+                  <td>ViT-B/8</td>
+                  <td>5.1</td>
+                  <td>2.3</td>
+                  <td>2.5</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="uk-card uk-card-default uk-card-body uk-margin-remove uk-cover">
+            <h3 class="uk-card-title">Unsupervised Instance Segmentation (COCO val2017)</h3>
+            <table class="uk-table uk-table-small uk-text-small uk-table-divider">
+              <thead>
+                <tr>
+                  <th>Method</th>
+                  <th>Model</th>
+                  <th>AP50(&uarr;)</th>
+                  <th>AP75(&uarr;)</th>
+                  <th>AP(&uarr;)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>SimDINO</td>
+                  <td>ViT-L/16</td>
+                  <td>4.5</td>
+                  <td>1.4</td>
+                  <td>1.9</td>
+                </tr>
+                <tr class="uk-active">
+                  <td>SimDINO</td>
+                  <td>ViT-B/16</td>
+                  <td><b>4.7</td>
+                  <td><b>1.5</td>
+                  <td><b>2.0</td>
+                </tr>
+                <tr>
+                  <td>DINO</td>
+                  <td>ViT-B/16</td>
+                  <td>3.1</td>
+                  <td>1.0</td>
+                  <td>1.4</td>
+                </tr>
+                <tr class="uk-text-muted">
+                  <td>DINO</td>
+                  <td>ViT-B/8</td>
+                  <td>4.1</td>
+                  <td>1.3</td>
+                  <td>1.8</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="uk-card uk-card-default uk-card-body uk-margin-remove uk-cover">
+            <h3 class="uk-card-title">Semantic Segmentation (ADE20K)</h3>
+            <table class="uk-table uk-table-small uk-text-small uk-table-divider">
+              <thead>
+                <tr>
+                  <th>Method</th>
+                  <th>Model</th>
+                  <th>mIoU(&uarr;)</th>
+                  <th>mAcc(&uarr;)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>DINO</td>
+                  <td>ViT-B/16</td>
+                  <td>33.1</td>
+                  <td>41.9</td>
+                </tr>
+                <tr class="uk-active">
+                  <td>SimDINO</td>
+                  <td>ViT-B/16</td>
+                  <td><b>33.7</td>
+                  <td><b>42.8</td>
+                </tr>
+                <tr>
+                  <td>DINOv2</td>
+                  <td>ViT-B/16</td>
+                  <td>32.5</td>
+                  <td>41.4</td>
+                </tr>
+                <tr class="uk-active">
+                  <td>SimDINOv2</td>
+                  <td>ViT-B/16</td>
+                  <td><b>36.9</td>
+                  <td><b>46.5</td>
+                </tr>
+                <tr>
+                  <td>DINOv2</td>
+                  <td>ViT-L/16</td>
+                  <td>41.0</td>
+                  <td>50.8</td>
+                </tr>
+                <tr class="uk-active">
+                  <td>SimDINOv2</td>
+                  <td>ViT-L/16</td>
+                  <td><b>41.8</td>
+                  <td><b>52.2</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="uk-card uk-card-default uk-card-body uk-margin-remove uk-cover">
+            <h3 class="uk-card-title">Video Object Segmentation (DAVIS-2017)</h3>
+            <table class="uk-table uk-table-small uk-text-small uk-table-divider">
+              <thead>
+                <tr>
+                  <th>Method</th>
+                  <th>Model</th>
+                  <th>(J&F)m(&uarr;)</th>
+                  <th>Jm(&uarr;)</th>
+                  <th>Fm(&uarr;)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>DINO</td>
+                  <td>ViT-B/16</td>
+                  <td>63.0</td>
+                  <td>61.5</td>
+                  <td>64.4</td>
+                </tr>
+                <tr class="uk-active">
+                  <td>SimDINO</td>
+                  <td>ViT-B/16</td>
+                  <td><b>63.0</td>
+                  <td><b>61.6</td>
+                  <td><b>64.4</td>
+                </tr>
+                <tr>
+                  <td>DINOv2</td>
+                  <td>ViT-B/16</td>
+                  <td>53.2</td>
+                  <td>52.7</td>
+                  <td>53.7</td>
+                </tr>
+                <tr class="uk-active">
+                  <td>SimDINOv2</td>
+                  <td>ViT-B/16</td>
+                  <td><b>60.9</td>
+                  <td><b>60.4</td>
+                  <td><b>61.4</td>
+                </tr>
+                <tr>
+                  <td>DINOv2</td>
+                  <td>ViT-L/16</td>
+                  <td>62.0</td>
+                  <td>61.7</td>
+                  <td>62.3</td>
+                </tr>
+                <tr class="uk-active">
+                  <td>SimDINOv2</td>
+                  <td>ViT-L/16</td>
+                  <td><b>62.6</td>
+                  <td><b>61.9</td>
+                  <td><b>63.3</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="uk-position-bottom-center uk-position-small">
+          <ul class="uk-dotnav">
+            <li uk-slideshow-item="0"><a href="#">Classification</a></li>
+            <li uk-slideshow-item="1"><a href="#">Detection</a></li>
+            <li uk-slideshow-item="2"><a href="#">InsSegmentation</a></li>
+            <li uk-slideshow-item="3"><a href="#">SemSegmentation</a></li>
+            <li uk-slideshow-item="4"><a href="#">VidSegmentation</a></li>
+          </ul>
+        </div>
+        <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slideshow-item="previous"></a>
+        <a class="uk-position-center-right uk-position-small uk-hidden-hover" href="#" uk-slidenav-next uk-slideshow-item="next"></a>
+      </div>
+      
+      ### Feature Visualizations
+      Our models exhibit strong emergent properties similar to the original DINO families. Below we show different types of visualizations demonstrating the models' capabilities:
+
+      <div class="uk-position-relative" uk-slideshow="animation:fade; autoplay: true; autoplay-interval: 5000; ratio: 10:9;">
+        <div class="uk-slideshow-items">
+          <div class="uk-transform-origin-center-left">
+            <img src="attn_visattn_map-head_mean.jpg" alt="Attention Maps">
+            <div class="uk-overlay uk-overlay-primary uk-position-bottom uk-light">
+              <h3 class="uk-margin-remove">Attention Maps</h3>
+              <p class="uk-margin-remove">Average self-attention maps showing object-centric attention patterns</p>
+            </div>
+          </div>
+          <div class="uk-transform-origin-center-right">
+            <img src="attn_visk-pca_1_2_3_rgb.jpg" alt="PCA Visualization">
+            <div class="uk-overlay uk-overlay-primary uk-position-bottom uk-light">
+              <h3 class="uk-margin-remove">PCA Visualization</h3>
+              <p class="uk-margin-remove">Top three principal components of key features in RGB format</p>
+            </div>
+          </div>
+          <div class="uk-transform-origin-top-center">
+            <img src="attn_visattn-cls_scaled.jpg" alt="Saliency Maps">
+            <div class="uk-overlay uk-overlay-primary uk-position-bottom uk-light">
+              <h3 class="uk-margin-remove">Saliency Maps</h3>
+              <p class="uk-margin-remove">Regions attended by the [CLS] token</p>
+            </div>
+          </div>
+        </div>
+        <div class="uk-position-bottom-center uk-position-small">
+          <ul class="uk-dotnav">
+            <li uk-slideshow-item="0"><a href="#">Attention Maps</a></li>
+            <li uk-slideshow-item="1"><a href="#">PCA Analysis</a></li>
+            <li uk-slideshow-item="2"><a href="#">Saliency Maps</a></li>
+          </ul>
+        </div>
+        <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slideshow-item="previous"></a>
+        <a class="uk-position-center-right uk-position-small uk-hidden-hover" href="#" uk-slidenav-next uk-slideshow-item="next"></a>
+      </div>
+
+      ### Optimization Dynamics
+      <div class="uk-child-width-1-2@m" uk-grid>
+        <div>
+          <img src="knn_inet1k_dino_vs_simdino.jpg" alt="">
+        </div>
+        <div>
+          <img src="knn_inet1k_dino_vs_simdino_trainoncoco.jpg" alt="">
+        </div>
+      </div>
+
+      We visualize the training dynamics of SimDINO and DINO under different training scenarios. X-axis denotes the training epochs while Y-axis indicates the k-NN performance on ImageNet-1K.
+      - **Left:** Both models are trained on ImageNet-1K. We omit the earlier epochs for better visualization.
+      - **Right:** Both models are trained on COCO train2017 (roughly 1/10th of ImageNet-1K). As a verification experiment, this shows that SimDINO requires substantially less tuning and much easier to optimize.
+
+  - title: Approach
+    text: |
+      The core insight of our work is that representation collapse can be prevented directly through coding rate regularization, eliminating the need for many empirically-designed components. Take DINO as an example:
+      <div>
+        <img src="dino_pipeline.jpg" alt="">
+      </div>
+
+      It turns out we can remove many empirically-designed components and replace them with a simple coding rate term in the loss function.
+
+      **Removing Empirically-Designed Components:**
+      - A weight-normalized linear layer that projects features to high-dimensional (~65,536) outputs.
+      - Balancing operations to prevent representation collapse (e.g., centering, sharpening).
+      - Miscellaneous hyperparameters (e.g., temperature schedules, centering momentum).
+
+      **Opting for Simple, Explicit Solutions:**
+      - Feature alignment loss $\mathcal{L}_{\text{align}}$ via simple Euclidean distance: $d_{\ell^{2}}(z_1,z_2) = \frac{1}{2}\|z_1 - z_2\|^2$.
+      - Anti-collapse loss $\mathcal{L}_{\text{rate}}$ based on explicit coding rate regularization: $$R_{\epsilon}(\Gamma) := \frac{1}{2}\text{logdet}({I + \frac{d}{\epsilon^{2}}\Gamma}),$$ where $\Gamma = \text{Cov}(Z)$ is the covariance of global-view features computed on a batch of images, $d$ is feature dimension and $\epsilon$ denotes the distortion error (Refer to the paper for more specifics).
+      - Combining these two losses leads to the complete objective $\mathcal{L} = \mathcal{L}_{\text{align}} + \lambda \mathcal{L}_{\text{rate}}$, where the balancing factor $\lambda$ can be explicitly derived based on gradient norm (See Appendix C). 
+      
+      This leads to a much simpler pipeline we term SimDINO:
+      <div>
+        <img src="simdino_pipeline.jpg" alt="" style="width: 80%;">
+      </div>
+
+      This streamlined design makes the models more robust to architectural choices and hyperparameter settings while achieving better downstream performance. The coding rate term provides a theoretically motivated way to prevent collapse, replacing the many empirical tricks in the original DINO pipeline. Similar simplifications can be made to DINOv2, leading to SimDINOv2. Refer to the paper for more details.

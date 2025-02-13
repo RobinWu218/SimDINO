@@ -1,0 +1,74 @@
+{
+  "name": "academic-project-template",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "vite",
+    "clean": "rm -rf build/",
+    "build": "vite build",
+    "postbuild": "react-snap",
+    "preview": "vite preview",
+    "format": "prettier src/ --check",
+    "format:fix": "prettier -w src/ --check",
+    "lint": "eslint src/",
+    "typos": "typos",
+    "typos:fix": "typos --write-changes",
+    "prepare": "husky"
+  },
+  "author": "denkiwakame <denkivvakame@gmail.com>",
+  "license": "CC-BY-SA4.0",
+  "volta": {
+    "node": "22.13.1"
+  },
+  "reactSnap": {
+    "puppeteerArgs": [
+      "--disable-setuid-sandbox",
+      "--no-sandbox"
+    ],
+    "concurrency": 1,
+    "inlineCss": false
+  },
+  "devDependencies": {
+    "@rollup/plugin-yaml": "^4.1.2",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^8.56.0",
+    "eslint-plugin-react": "^7.33.2",
+    "husky": "^9.1.7",
+    "js-yaml": "^4.1.0",
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.2.1",
+    "react-snap": "^1.23.0",
+    "sass": "^1.83.4",
+    "sharp": "^0.33.2",
+    "typos-rs-npm": "github:dalisoft/typos-rs-npm",
+    "vite": "^6.0.11"
+  },
+  "dependencies": {
+    "@iconify-json/logos": "^1.1.43",
+    "@iconify-json/simple-icons": "^1.1.110",
+    "@iconify/react": "^5.0.1",
+    "katex": "^0.16.21",
+    "marked": "^13.0.0",
+    "marked-katex-extension": "^5.0.1",
+    "material-design-color": "^2.3.2",
+    "normalize.css": "^8.0.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-helmet": "^6.1.0",
+    "react-icons": "^5.0.1",
+    "react-player": "^2.14.1",
+    "swiper": "^11.0.5",
+    "uikit": "^3.22.3"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx}": [
+      "prettier --write"
+    ],
+    "*.{json,yml,yaml,scss,sass}": [
+      "prettier --write"
+    ],
+    "**/*.{js,jsx,yml,yaml,md}": [
+      "typos"
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+name: lint
+
+on:
+  push:
+    branches:
+      - project-page
+  pull_request:
+    branches:
+      - project-page
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.1'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: ESLint
+        run: npm run lint
+      - name: Prettier
+        run: npm run format
+      - name: Typos
+        run: npm run typos
