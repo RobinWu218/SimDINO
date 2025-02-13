@@ -423,4 +423,4 @@ body:
         <img src="simdino_pipeline.jpg" alt="" style="width: 80%;">
       </div>
 
-      This streamlined design makes the models more robust to architectural choices and hyperparameter settings while achieving better downstream performance. The coding rate term provides a theoretically motivated way to prevent collapse, replacing the many empirical tricks in the original DINO pipeline. Similar simplifications can be made to DINOv2, leading to SimDINOv2. Refer to the paper for more details.
+      This streamlined design makes the models more robust to architectural choices and hyperparameter settings while achieving better downstream performance. The coding rate term provides a theoretically motivated way to prevent collapse, replacing many empirical design choices in the original DINO pipeline. Similar simplifications can be made to DINOv2, leading to SimDINOv2. Refer to the paper for more details.
