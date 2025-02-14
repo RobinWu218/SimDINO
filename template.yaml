@@ -1,14 +1,14 @@
 theme: default
-organization: UCB
+organization: SimDINO
 title: |
   SimDINO: Simplifying DINO by Coding Rate Regularization
 # journal: "ICML'25"
 resources:
   # paper: https://openreview.net/
   arxiv: https://arxiv.org
-  code: https://github.com
+  code: https://github.com/RobinWu218/SimDINO
   video: # To be updated when available
-description: A simplified and more robust version of DINO that achieves better performance through explicit coding rate regularization.
+description: A simplified, more stable, and more robust version of DINO that achieves better performance through explicit coding rate regularization.
 
 image: public/simdino_pipeline.jpg
 url: # To be updated
