@@ -1,11 +1,11 @@
 theme: default
 organization: SimDINO
 title: |
-  SimDINO: Simplifying DINO by Coding Rate Regularization
+  SimDINO: Simplifying DINO via Coding Rate Regularization
 # journal: "ICML'25"
 resources:
   # paper: https://openreview.net/
-  arxiv: https://arxiv.org
+  arxiv: https://arxiv.org/abs/2502.10385
   code: https://github.com/RobinWu218/SimDINO
   video: # To be updated when available
 description: A simplified, more stable, and more robust version of DINO that achieves better performance through explicit coding rate regularization.
@@ -46,9 +46,9 @@ affiliations:
 
 bibtex: >
   @article{wu2025simdino,
-    title={Simplifying DINO by Coding Rate Regularization},
+    title={Simplifying DINO via Coding Rate Regularization},
     author={Ziyang Wu, Jingyuan Zhang, Druv Pai, Xudong Wang, Chandan Singh, Jianwei Yang, Jianfeng Gao, Yi Ma},
-    booktitle={arXiv preprint arXiv:},
+    booktitle={arXiv preprint arXiv:2502.10385},
     year={2025}
   }
   
@@ -93,42 +93,42 @@ body:
                 <tbody>
                   <tr>
                     <td>DINO</td>
-                    <td>ViT-B</td>
+                    <td>ViT-B/16</td>
                     <td>100</td>
                     <td>72.9</td>
                     <td>76.3</td>
                   </tr>
                   <tr class="uk-active">
                     <td>SimDINO</td>
-                    <td>ViT-B</td>
+                    <td>ViT-B/16</td>
                     <td>100</td>
                     <td><b>74.9</td>
                     <td><b>77.3</td>
                   </tr>
                   <tr>
                     <td>DINOv2</td>
-                    <td>ViT-B</td>
+                    <td>ViT-B/16</td>
                     <td>100</td>
                     <td>76.0</td>
                     <td>77.2</td>
                   </tr>
                   <tr class="uk-active">
                     <td>SimDINOv2</td>
-                    <td>ViT-B</td>
+                    <td>ViT-B/16</td>
                     <td>100</td>
                     <td><b>78.1</td>
                     <td><b>79.7</td>
                   </tr>
                   <tr>
                     <td>DINOv2</td>
-                    <td>ViT-L</td>
+                    <td>ViT-L/16</td>
                     <td>100</td>
                     <td>80.8</td>
                     <td>82.0</td>
                   </tr>
                   <tr class="uk-active">
                     <td>SimDINOv2</td>
-                    <td>ViT-L</td>
+                    <td>ViT-L/16</td>
                     <td>100</td>
                     <td><b>81.1</td>
                     <td><b>82.4</td>
@@ -395,7 +395,7 @@ body:
         </div>
       </div>
 
-      We visualize the training dynamics of SimDINO and DINO under different training scenarios. X-axis denotes the training epochs while Y-axis indicates the k-NN performance on ImageNet-1K.
+      We visualize the training dynamics of training ViT-B/16 under SimDINO and DINO. X-axis denotes the training epochs while Y-axis indicates the k-NN performance on ImageNet-1K.
       - **Left:** Both models are trained on ImageNet-1K. We omit the earlier epochs for better visualization.
       - **Right:** Both models are trained on COCO train2017 (roughly 1/10th of ImageNet-1K). As a verification experiment, this shows that SimDINO requires substantially less tuning and much easier to optimize.
 
@@ -409,7 +409,7 @@ body:
       It turns out we can remove many empirically-designed components and replace them with a simple coding rate term in the loss function.
 
       **Removing Empirically-Designed Components:**
-      - A weight-normalized linear layer that projects features to high-dimensional (~65,536) outputs.
+      - A weight-normalized linear layer that projects features to high-dim (~65,536) outputs for clustering.
       - Balancing operations to prevent representation collapse (e.g., centering, sharpening).
       - Miscellaneous hyperparameters (e.g., temperature schedules, centering momentum).
 
