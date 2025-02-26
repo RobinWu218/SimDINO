@@ -1,0 +1,27 @@
+student:
+  arch: vit_large
+  block: nested
+  patch_size: 16
+  drop_path_rate: 0.3
+  rescale_weight: 1.0
+  layerscale: 0
+  layerscale_offset:
+  drop_path_uniform: true
+  pretrained_weights: ''
+  pretrained_img_size: 224
+  freeze_backbone_epochs: 0
+  ffn_layer: mlp
+  block_chunks: 4
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+  drop_masks: false
+  gradient_checkpointing: false
+  attn_drop: 0.0
+  ffn_drop: 0.0
+  qknorm: False
+  max_resolution: 14
+  base: 20

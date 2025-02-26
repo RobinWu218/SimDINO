@@ -1,0 +1,159 @@
+MODEL:
+  WEIGHTS: ''
+compile: true
+ignore_nan: false
+compute_precision:
+  grad_scaler: true
+  teacher:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+dino:
+  use_mcr: false
+  mcr:
+    expa_loss: mcr
+    comp_loss: cosine
+    eps: 0.05
+    eps_end: -1
+    coeff: 1
+    coeff_end: -1
+  loss_weight: 1.0
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+  koleo_loss_weight: 0.1
+  remove_last_layer: false
+  head_normalize: true
+ibot:
+  use_mcr: false
+  mcr:
+    eps: 0.05
+    coeff: 1
+    coeff_end: 1
+  loss_weight: 1.0
+  loss_weight_end: -1
+  loss_weight_freeze_epochs: 0
+  loss_weight_warmup_epochs: 0
+  activate_epochs: 0
+  mask_sample_probability: 0.5
+  mask_ratio_min_max:
+  - 0.1
+  - 0.5
+  separate_head: false
+  head_n_prototypes: 65536
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+  remove_last_layer: false
+  head_normalize: true
+train:
+  recipe: sim
+  batch_size_per_gpu: 128
+  dataset_path: ImageNet:split=TRAIN:root=/data/datasets/imagenet1k:extra=/public/datasets/imagenet1k_dino_extra
+  output_dir: .
+  saveckp_freq: 100
+  seed: 0
+  num_workers: 10
+  OFFICIAL_EPOCH_LENGTH: -1
+  cache_dataset: true
+  centering: "centering" # or "sinkhorn_knopp"
+  actions: []
+student:
+  arch: vit_large
+  block: nested
+  patch_size: 16
+  drop_path_rate: 0.3
+  rescale_weight: 1.0
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: ''
+  pretrained_img_size:
+  pretrained_patch_size:
+  freeze_backbone_epochs: 0
+  ffn_layer: mlp
+  block_chunks: 4
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  num_register_tokens: 4
+  interpolate_antialias: true
+  interpolate_offset: 0.0
+  drop_masks: false
+  gradient_checkpointing: false
+  attn_drop: 0.0
+  ffn_drop: 0.0
+  qknorm: False
+teacher:
+  momentum_teacher: 0.992
+  final_momentum_teacher: 1
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+optim:
+  opt: adamw
+  epochs: 100
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.004  # learning rate for a batch size of 1024
+  lr: 0.  # will be set after applying scaling rule
+  warmup_epochs: 10
+  peak_epochs: 0
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  clip_grad_end: -1
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  kwargs:
+    foreach: true
+    betas: [0.9, 0.999]
+crops:
+  global_crops_scale:
+  - 0.4
+  - 1
+  local_crops_number: 10
+  local_crops_scale:
+  - 0.05
+  - 0.4
+  global_crops_size: 224
+  local_crops_size: 96
+evaluation:
+  eval_period_epochs: 10
+  img_size:
+  patch_size:

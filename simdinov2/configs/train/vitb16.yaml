@@ -1,0 +1,6 @@
+train:
+  dataset_path: ImageNet:split=TRAIN:root=/data/datasets/imagenet1k
+  batch_size_per_gpu: 64 # 32 * 4node/实际node数
+student:
+  arch: vit_base
+  block_chunks: 4

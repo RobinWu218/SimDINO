@@ -1,0 +1,113 @@
+MODEL:
+  WEIGHTS: ''
+compile: true
+compute_precision:
+  grad_scaler: true
+  teacher:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        buffer_dtype: fp32
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: bf16
+        reduce_dtype: bf16
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+    ibot_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+dino:
+  use_mcr: true
+  mcr:
+    expa_loss: mcr
+    comp_loss: cosine
+    expa_type: 1
+    reduce_cov: 0
+    eps: 0.05
+    eps_end: -1
+    coeff: 1
+    coeff_end: -1
+  loss_weight: 1.0
+  head_n_prototypes: 256
+  head_bottleneck_dim: 256
+  head_nlayers: 3
+  head_hidden_dim: 2048
+  koleo_loss_weight: 0
+  remove_last_layer: true
+  head_normalize: true
+ibot:
+  use_mcr: true
+  loss_weight: 1
+  separate_head: false
+  head_n_prototypes: 256
+  remove_last_layer: true
+train:
+  output_dir: /dinov2/outputs/vitl16_reg4_simdinov2
+  centering: none
+student:
+  arch: vit_large
+  layerscale: 0.1
+teacher:
+  momentum_teacher: 0.9
+  final_momentum_teacher: 1
+  warmup_teacher_temp: 0.04
+  teacher_temp: 0.07
+  warmup_teacher_temp_epochs: 30
+optim:
+  opt: adamw
+  epochs: 100
+  weight_decay: 0.04
+  weight_decay_end: 0.4
+  base_lr: 0.004
+  lr: 0.  # will be set after applying scaling rule
+  warmup_epochs: 10
+  min_lr: 1.0e-06
+  clip_grad: 3.0
+  clip_grad_end: -1
+  freeze_last_layer_epochs: 1
+  scaling_rule: sqrt_wrt_1024
+  patch_embed_lr_mult: 0.2
+  layerwise_decay: 0.9
+  kwargs:
+    foreach: true
+    betas: [0.9, 0.999]
+  schedulefree_kwargs:
+    weight_decay_at_y: 0.0
+    momentum: 0.9
+crops:
+  global_crops_scale:
+  - 0.4
+  - 1
+  local_crops_number: 10
+  local_crops_scale:
+  - 0.05
+  - 0.4
+  global_crops_size: 224
+  local_crops_size: 96
+evaluation:
+  eval_period_epochs: 10
