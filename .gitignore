@@ -9,6 +9,7 @@ dist/
 **/.ipynb_checkpoints/**
 
 *.swp
+*.DS_Store
 
 .vscode/
 .history
