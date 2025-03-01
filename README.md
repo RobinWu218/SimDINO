@@ -109,7 +109,7 @@ Note: our compute resource is limited but we are working on scaling up our appro
 
 ## Installation
 
-Our implementation requires Python 3.11+, PyTorch 2.4+ and [xFormers](https://github.com/facebookresearch/xformers) as well as a number of other 3rd party packages. Note that the code has only been tested with the specified versions and also expects a Linux environment. To setup the dependencies, please install via:
+Our implementation requires Python 3.11+, PyTorch 2.4+ and [xFormers](https://github.com/facebookresearch/xformers) 0.0.29+ and some other packages. Note that the code has only been tested with the specified versions and also expects a Linux environment. To setup the dependencies, please install via:
 
 ```sh
 pip install -r requirements.txt

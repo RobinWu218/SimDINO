@@ -1,11 +1,11 @@
---extra-index-url https://download.pytorch.org/whl/cu117
-torch==2.5.0
+--extra-index-url https://download.pytorch.org/whl/cu118
+torch==2.5.1
 torchvision
 omegaconf
 torchmetrics
 fvcore
 iopath
-xformers
+xformers==0.0.29
 submitit
 --extra-index-url https://pypi.nvidia.com
 cuml-cu11
