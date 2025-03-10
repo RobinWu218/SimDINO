@@ -10,9 +10,12 @@ dist/
 
 *.swp
 *.DS_Store
+*.slurm
 
 .vscode/
 .history
 outputs
+sbatch_logs/
 
 debug
+wandb
