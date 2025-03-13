@@ -19,3 +19,4 @@ sbatch_logs/
 
 debug
 wandb
+swanlog

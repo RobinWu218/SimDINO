@@ -12,3 +12,4 @@ cuml-cu11
 einops
 wandb
 timm
+# swanlab # optional experiments tracking tool if wandb doesn't work

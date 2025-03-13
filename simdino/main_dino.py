@@ -136,7 +136,8 @@ def get_args_parser():
     parser.add_argument("--dist_url", default="env://", type=str, help="""url used to set up
         distributed training; see https://pytorch.org/docs/stable/distributed.html""")
     parser.add_argument("--local_rank", default=0, type=int, help="Please ignore and do not set this argument.")
-    parser.add_argument('--nowandb', action='store_false', help='do not log wandb')
+    parser.add_argument("--track_wandb", action='store_true', help='logging with wandb')
+    parser.add_argument("--track_swan", action='store_true', help='log with swanlab')
 
     # MCR
     parser.add_argument('--coeff', type=float, default=1,
@@ -163,17 +164,28 @@ def train_dino(args):
     log_file = Path(args.output_dir, "output.log")
     def print(*args, **kwargs):
         print_(*args, **kwargs)
-        with open(log_file, "a") as f:
-            print_(*args, **kwargs, file=f)
+        if 'file' not in kwargs:
+            with open(log_file, "a") as f:
+                print_(*args, **kwargs, file=f)
     builtins.print = print
     print("git:\n  {}\n".format(utils.get_sha()))
     print("\n".join("%s: %s" % (k, str(v)) for k, v in sorted(dict(vars(args)).items())))
     
+    assert not(args.track_wandb and args.track_swan), "Please do not use both tracking methods simultaneously."
     # ============ setup wandb ============
-    if args.nowandb and utils.is_main_process():
+    if args.track_wandb and utils.is_main_process():
         runname = args.output_dir.rstrip('/').split('/')[-1]
-        wandb.init(entity="your-entity", project="simdinov1", name=runname)
+        wandb.init(project="simdinov1", name=runname)
         wandb.config.update(args)
+    
+    # ============ setup swanlab ============
+    if args.track_swan and utils.is_main_process():
+        import swanlab
+        runname = args.output_dir.rstrip('/').split('/')[-1]
+        swanlab.sync_wandb()
+        wandb.init(project="simdinov1", name=runname, mode='offline')
+        wandb.config.update(args)
+    args.enable_logging = utils.is_main_process() and (args.track_wandb or args.track_swan)
 
     # ============ preparing data ... ============
     transform = DataAugmentationDINO(
@@ -409,17 +421,17 @@ def train_one_epoch(student, teacher, teacher_without_ddp, dino_loss, data_loade
         torch.cuda.synchronize()
         metric_logger.update(loss=loss.item())
         if args.use_simdino:
-            metric_logger.update(expa_loss=expa_loss)
-            metric_logger.update(comp_loss=comp_loss)
+            metric_logger.update(expa_loss=expa_loss.item())
+            metric_logger.update(comp_loss=comp_loss.item())
         metric_logger.update(lr=optimizer.param_groups[0]["lr"])
         metric_logger.update(wd=optimizer.param_groups[0]["weight_decay"])
-        if utils.is_main_process() and args.nowandb:
+        if args.enable_logging:
             logs2wb = {"loss": loss.item(), 
                     "lr": optimizer.param_groups[0]["lr"], 
                     "wd": optimizer.param_groups[0]["weight_decay"]}
             if args.use_simdino:
-                logs2wb.update({"expa_loss": expa_loss, 
-                                "comp_loss": comp_loss,
+                logs2wb.update({"expa_loss": expa_loss.item(), 
+                                "comp_loss": comp_loss.item(),
                                 })
             wandb.log(logs2wb) 
     metric_logger.synchronize_between_processes()

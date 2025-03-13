@@ -153,11 +153,11 @@ You can train SimDINO on ViT-B/16 with an 8-GPU node (each with at least 40G mem
 
 ```shell
 cd simdino
-torchrun --nnodes=1 --nproc_per_node=8 main_dino.py --arch vit_base --patch_size 16 \
+torchrun --nnodes=1 --nproc_per_node=8 main_dino.py --arch vit_base --patch_size 16 --local_crops_number 10 \
     --eps 0.05 --coeff 1 --output_dir <PATH/TO/OUTPUT/DIR> --data_path <PATH/TO/DATASET/TRAIN> \
-    --nowandb # remove to enable wandb logging
+    --track_wandb # to enable logging; use --track_wandb to log with wandb and --track_swan to log with swanlab
 ```
-Training time is approximately 1.5 day and you should be able to replicate our reported results.
+Training time is approximately 1.5 day and you should be able to replicate our reported results. An example log on ViT-B/16 can be found [here](assets/SimDNIOv1_vitb16.txt).
 
 ### Training SimDINOv2 on ImageNet-1k
 
@@ -170,7 +170,7 @@ torchrun --nnodes=1 --nproc_per_node=8 simdinov2/train/train.py \
     train.dataset_path=ImageNet:split=TRAIN:root=<PATH/TO/DATASET>:extra=<PATH/TO/DATASET>
 ```
 
-Training time is approximately 1 day and you should be able to replicate our reported results.
+Training time is approximately 1 day and you should be able to replicate our reported results. An example log on ViT-B/16 can be found [here](assets/SimDNIOv2-vitb16.json).
 The training code saves the weights of the teacher in the `eval` folder every 10 epochs for evaluation. You can change the `student.arch` field in `simdino_config.yaml` to train other models.
 
 You can also use `submitit` if your environment happens to be a SLURM cluster:
