@@ -80,7 +80,7 @@ teacher:
   teacher_temp: 0.07
   warmup_teacher_temp_epochs: 30
 optim:
-  opt: soap
+  opt: adamw
   epochs: 100
   weight_decay: 0.04
   weight_decay_end: 0.4
