@@ -185,7 +185,7 @@ python simdinov2/run/train/train.py \
 ### FAQ & Tips on Training
 **Q: How can I visualize the training losses?**
 
-**A:** In SimDINO, you can remove the `--nowandb` argument to enable wandb logging.
+**A:** In SimDINO, you can append the `--track_wandb` argument to enable wandb logging. If somehow wandb doesn't work, you can use `--track_wandb` to enable swanlab tracking instead.
 
 **Q: I notice some spikes in coding rate loss in early training stages. Is that normal?**
 
