@@ -21,6 +21,8 @@ from functools import partial
 import torch
 import torch.nn as nn
 
+from huggingface_hub import PyTorchModelHubMixin
+
 from utils import trunc_normal_
 
 
@@ -131,7 +133,11 @@ class PatchEmbed(nn.Module):
         return x
 
 
-class VisionTransformer(nn.Module):
+class VisionTransformer(nn.Module, PyTorchModelHubMixin,
+                        repo_url="https://github.com/RobinWu218/SimDINO",
+                        license="mit",
+                        pipeline_tag="image-classification",
+                        paper_url="https://huggingface.co/papers/2502.10385"):
     """ Vision Transformer """
     def __init__(self, img_size=[224], patch_size=16, in_chans=3, num_classes=0, embed_dim=768, depth=12,
                  num_heads=12, mlp_ratio=4., qkv_bias=False, qk_scale=None, drop_rate=0., attn_drop_rate=0.,
